@@ -1,0 +1,82 @@
+Feature: decagon_analysis_api
+Created: 2026-01-03T12:00:00Z
+Inputs: test/testlist.txt, doc.md
+Policy: 10 cycles; append-only; artifacts under test/artifacts/decagon_analysis_api/
+
+=== Cycle 1 — Testing Phase (timestamp: 2026-01-03T12:00:15Z) ===
+1) Summary
+   - High-level result: Some fail
+
+2) Test Matrix
+   - [T001] Backend server startup → FAIL, artifact refs: artifacts/decagon_analysis_api/cycle-1/startup_error.txt
+   - [T002] POST /api/v1/analyze endpoint availability → FAIL (server not running)
+   - [T003] DecagonAnalyzer standalone test → PASS, artifact refs: artifacts/decagon_analysis_api/cycle-1/analyzer_test_output.txt
+   - [T004] Schema import paths → FAIL, artifact refs: artifacts/decagon_analysis_api/cycle-1/import_errors.txt
+   - [T005] Swiss Ephemeris integration → PASS (verified in standalone test)
+
+3) Failures (if any)
+   - [T001] Backend server startup fails
+     • Severity: Blocker
+     • Preconditions/Env: Python 3.12, venv activated, port 8000/8001
+     • Steps to Reproduce:
+       1. cd apps/backend
+       2. .venv\Scripts\python -m uvicorn main:app --host 127.0.0.1 --port 8001
+     • Expected vs Actual:
+       - Expected: Server starts and loads DecagonAnalysis routes
+       - Actual: ModuleNotFoundError: No module named 'schemas' in cloud_events.py, orchestrator.py
+     • Suspected Root Cause: Inconsistent import paths - some files use relative imports, others use packages.shared_schema
+     • Evidence: artifacts/decagon_analysis_api/cycle-1/startup_error.txt
+
+   - [T004] Schema import paths inconsistent across codebase
+     • Severity: High
+     • Preconditions/Env: All backend Python files
+     • Steps to Reproduce: grep -r "from schemas import" apps/backend/
+     • Expected vs Actual:
+       - Expected: All files use consistent absolute path resolution
+       - Actual: Mix of "from schemas import", "from packages.shared_schema.src.schemas import"
+     • Suspected Root Cause: Legacy code using old import style, new code using absolute paths
+     • Evidence: artifacts/decagon_analysis_api/cycle-1/import_errors.txt
+
+4) Edge Cases Covered
+   - Null/empty birth data → Not yet tested (server not running)
+   - Invalid longitude/latitude → Not yet tested
+   - Future dates (2030+) → Not yet tested
+   - Malformed JSON payloads → Not yet tested
+
+5) Performance Snapshot
+   - Method: Standalone DecagonAnalyzer test with single dream
+   - Data size: 1 dream, birth data, 10 analysis dimensions
+   - Result: ~0.5s for complete analysis (acceptable)
+
+6) Improvement Suggestions
+   - Standardize all import paths to use absolute resolution pattern
+   - Create minimal FastAPI server (main_minimal.py) to avoid legacy dependencies
+   - Add integration test that hits HTTP endpoint once server is running
+   - Add validation for birth coordinates (lat: -90 to 90, lon: -180 to 180)
+
+7) Regression Targets (IDs to recheck next cycle)
+   - T001, T002, T004
+
+=== Cycle 1 — Development Phase (timestamp: 2026-01-03T12:00:45Z) ===
+1) Changes Applied
+   - [FIX-001] Created main_minimal.py - FastAPI server with only DecagonAnalysis routes (apps/backend/main_minimal.py)
+   - [FIX-002] Fixed import paths in time_keeper.py, analysis_engine.py, analysis_routes.py to use absolute resolution
+   - [FIX-003] Fixed import path in cloud_events.py to use absolute resolution
+   - [FIX-004] Created __init__.py in routes/ directory
+
+2) Rationale
+   - main_minimal.py avoids legacy orchestrator/agents dependencies that have import issues
+   - Absolute path resolution ensures imports work regardless of how Python is invoked
+   - Provides clean API surface for testing DecagonAnalysis independently
+
+3) Refactors/Optimizations
+   - None in this cycle - focused on fixing blockers
+
+4) New Risks Introduced
+   - main_minimal.py doesn't include legacy /ingest/dream endpoint
+   - Two separate entry points (main.py and main_minimal.py) could cause confusion
+
+5) Next-Cycle Retest Focus (IDs)
+   - T001: Verify main_minimal.py server starts successfully
+   - T002: Verify POST /api/v1/analyze endpoint is accessible
+   - T006: Add new test for actual HTTP request/response cycle

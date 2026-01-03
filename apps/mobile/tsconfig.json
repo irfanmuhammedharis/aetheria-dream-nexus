@@ -1,0 +1,5 @@
+{
+  "extends": "./AetheriaMobile/tsconfig.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "AetheriaMobile/**/*.ts", "AetheriaMobile/**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"]
+}

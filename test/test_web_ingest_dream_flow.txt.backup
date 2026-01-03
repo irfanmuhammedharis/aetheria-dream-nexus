@@ -1,0 +1,165 @@
+Feature: web_ingest_dream_flow
+Created: 2026-01-02T14:29:32.3286771Z
+Inputs: test/testlist.txt, documentation.txt
+Policy: 10 cycles; append-only; artifacts under test/artifacts/web_ingest_dream_flow/
+
+=== Cycle 1 — Development Phase (timestamp: 2026-01-02T14:32:57.4731417Z) ===
+1) Changes Applied
+   - [WID-003] Update web client to send UUID-shaped dream_id/user_id (apps/web/src/App.tsx)
+2) Rationale
+   - Backend schema enforces UUID validation; client must comply to reach analysis pipeline
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None (uses crypto.randomUUID when available; stable fallback)
+5) Next-Cycle Retest Focus (IDs)
+   - WID-003
+
+=== Cycle 2 — Development Phase (timestamp: 2026-01-02T14:33:03.6281448Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 3 — Development Phase (timestamp: 2026-01-02T14:33:07.4738209Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 4 — Development Phase (timestamp: 2026-01-02T14:33:11.3610317Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 5 — Development Phase (timestamp: 2026-01-02T14:33:15.4751164Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 6 — Development Phase (timestamp: 2026-01-02T14:33:19.4622586Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 7 — Development Phase (timestamp: 2026-01-02T14:33:23.6328941Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 8 — Development Phase (timestamp: 2026-01-02T14:33:27.6943872Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 9 — Development Phase (timestamp: 2026-01-02T14:33:32.2170134Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Cycle 10 — Development Phase (timestamp: 2026-01-02T14:33:36.4112473Z) ===
+1) Changes Applied
+   - [WID-003] No code changes applied automatically; requires backend error triage (see evidence)
+2) Rationale
+   - Keep cycles deterministic; only change code on failures
+3) Refactors/Optimizations
+   - None
+4) New Risks Introduced
+   - None
+5) Next-Cycle Retest Focus (IDs)
+   - WID-001
+   - WID-002
+   - WID-003
+   - WID-004
+
+=== Feature Summary (timestamp: 2026-01-02T14:33:36.4947844Z) ===
+1) Pass/Fail Overview by Cycle
+   - Cycle 1: FAIL (WID-003 UUID validation)
+   - Cycle 2-10: See per-cycle Summary blocks
+2) Outstanding Known Issues (if any) + mitigations
+   - If any cycle shows WID-003 failure beyond Cycle 1, inspect artifacts/*/ingest_response.error.txt
+3) Performance Trend (qualitative)
+   - Not measured; functional focus
+4) Final Recommendations
+   - Add negative-case tests (empty/malformed payloads)
+   - Consider graceful backend fallback when external LLM unavailable in dev
+
+\n# sanity_append 2026-01-02T14:34:08.3272044Z
